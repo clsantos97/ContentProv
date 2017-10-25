@@ -11,6 +11,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.telephony.SmsManager;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -123,8 +124,12 @@ public class MainActivity extends AppCompatActivity implements Button.OnClickLis
                 try {
                     System.out.println(telefono + "," + mensaje);
                     smsManager.sendTextMessage(telefono, null, mensaje, null, null);
-                    Toast.makeText(getApplicationContext(), "Mensaje enviado",
-                            Toast.LENGTH_LONG).show();
+
+                    Toast toast = Toast.makeText(getApplicationContext(), "Mensaje enviado",
+                            Toast.LENGTH_LONG);
+                    toast.setGravity(Gravity.CENTER, 0, 0);
+                    toast.show();
+
                     Log.d(tag, "SMS enviado");
                 } catch (Exception e) {
                     Log.d(tag, "No se pudo enviar el SMS");
@@ -134,8 +139,12 @@ public class MainActivity extends AppCompatActivity implements Button.OnClickLis
             }
             curTelefono.close();
         } else {
-            Toast.makeText(getApplicationContext(), "El mensaje no puede estar vacio!",
-                    Toast.LENGTH_LONG).show();
+
+            Toast toast = Toast.makeText(getApplicationContext(), "El mensaje no puede estar vacio!",
+                    Toast.LENGTH_LONG);
+            toast.setGravity(Gravity.CENTER, 0, 0);
+            toast.show();
+
             etMensaje.requestFocus();
         }
 
