@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="app.contentprov.MainActivity">
+
+    <EditText
+        android:id="@+id/etBuscar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginLeft="30dp"
+        android:layout_marginStart="30dp"
+        android:layout_marginTop="47dp"
+        android:ems="10"
+        android:inputType="textPersonName"
+        tools:layout_editor_absoluteX="16dp"
+        tools:layout_editor_absoluteY="23dp" />
+
+    <Button
+        android:id="@+id/btnBuscar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/etBuscar"
+        android:layout_marginLeft="17dp"
+        android:layout_marginStart="17dp"
+        android:layout_toEndOf="@+id/etBuscar"
+        android:layout_toRightOf="@+id/etBuscar"
+        android:text="@string/btn_buscar" />
+
+    <EditText
+        android:id="@+id/etMensaje"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignEnd="@+id/btnBuscar"
+        android:layout_alignLeft="@+id/etBuscar"
+        android:layout_alignParentBottom="true"
+        android:layout_alignRight="@+id/btnBuscar"
+        android:layout_alignStart="@+id/etBuscar"
+        android:layout_marginBottom="31dp"
+        android:ems="10"
+        android:hint="@string/et_mensaje_prompt"
+        android:inputType="textPersonName" />
+
+    <ListView
+        android:id="@+id/lvContactos"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@+id/etMensaje"
+        android:layout_alignEnd="@+id/etMensaje"
+        android:layout_alignLeft="@+id/etBuscar"
+        android:layout_alignRight="@+id/etMensaje"
+        android:layout_alignStart="@+id/etBuscar"
+        android:layout_below="@+id/etBuscar"
+        android:layout_marginTop="32dp" />
+
+</RelativeLayout>

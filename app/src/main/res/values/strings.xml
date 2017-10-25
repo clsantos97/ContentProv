@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">ContentProv</string>
+    <string name="btn_buscar">Buscar</string>
+    <string name="et_mensaje_prompt">Escribe aqui el contenido del mensaje</string>
+</resources>
