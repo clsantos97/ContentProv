@@ -1,8 +1,12 @@
 package app.contentprov;
 
+import android.Manifest;
 import android.content.ContentResolver;
+import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.provider.ContactsContract;
+import android.support.annotation.NonNull;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.telephony.SmsManager;
@@ -14,11 +18,12 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class MainActivity extends AppCompatActivity implements Button.OnClickListener, ListView.OnItemLongClickListener{
+public class MainActivity extends AppCompatActivity implements Button.OnClickListener, ListView.OnItemLongClickListener {
     EditText etBuscar;
     EditText etMensaje;
     ContentResolver cr;
@@ -34,7 +39,7 @@ public class MainActivity extends AppCompatActivity implements Button.OnClickLis
         etBuscar = (EditText) findViewById(R.id.etBuscar);
         etMensaje = (EditText) findViewById(R.id.etMensaje);
 
-        b=(Button)findViewById(R.id.btnBuscar);
+        b = (Button) findViewById(R.id.btnBuscar);
         b.setOnClickListener(this);
 
         lvContactos = (ListView) findViewById(R.id.lvContactos);
@@ -55,8 +60,8 @@ public class MainActivity extends AppCompatActivity implements Button.OnClickLis
 
         List<String> lista_contactos = new ArrayList<String>();
 
-        if(cur.getCount()>0){
-            while(cur.moveToNext()) {
+        if (cur.getCount() > 0) {
+            while (cur.moveToNext()) {
                 // Obtener id de contacto
                 String id = cur.getString(cur.getColumnIndex(ContactsContract.Contacts._ID));
 
@@ -64,7 +69,7 @@ public class MainActivity extends AppCompatActivity implements Button.OnClickLis
                 String name = cur.getString(cur.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME));
 
                 // si tiene telefono, lo agregamos a la lista de contactos
-                if(Integer.parseInt(cur.getString(cur.getColumnIndex(ContactsContract.Contacts.HAS_PHONE_NUMBER)))>0){
+                if (Integer.parseInt(cur.getString(cur.getColumnIndex(ContactsContract.Contacts.HAS_PHONE_NUMBER))) > 0) {
                     lista_contactos.add(name);
                 }
             }
@@ -85,16 +90,16 @@ public class MainActivity extends AppCompatActivity implements Button.OnClickLis
         TextView t = (TextView) view;
         String nombreContacto = t.getText().toString();
 
-        String proyeccion[]={ContactsContract.Contacts._ID};
-        String filtro=ContactsContract.Contacts.DISPLAY_NAME + " = ?";
-        String args_filtro[]={nombreContacto};
+        String proyeccion[] = {ContactsContract.Contacts._ID};
+        String filtro = ContactsContract.Contacts.DISPLAY_NAME + " = ?";
+        String args_filtro[] = {nombreContacto};
 
         List<String> lcon = new ArrayList<String>();
 
-        Cursor cur = cr.query(ContactsContract.Contacts.CONTENT_URI,proyeccion,filtro, args_filtro,null);
+        Cursor cur = cr.query(ContactsContract.Contacts.CONTENT_URI, proyeccion, filtro, args_filtro, null);
 
-        if(cur.getCount()>0){
-            while(cur.moveToNext()) {
+        if (cur.getCount() > 0) {
+            while (cur.moveToNext()) {
                 String identificador = cur.getString(cur.getColumnIndex(ContactsContract.Contacts._ID));
                 sendSms(identificador);
             }
@@ -103,27 +108,38 @@ public class MainActivity extends AppCompatActivity implements Button.OnClickLis
         return true;
     }
 
-    private void sendSms(String identificador){
+    private void sendSms(String identificador) {
         SmsManager smsManager = SmsManager.getDefault();
         String mensaje = etMensaje.getText().toString();
 
-        Cursor curTelefono = cr.query(
-                ContactsContract.CommonDataKinds.Phone.CONTENT_URI,null,
-                ContactsContract.CommonDataKinds.Phone.CONTACT_ID + " = ?", new String[]{identificador},null);
+        if (!mensaje.isEmpty()) {
+            Cursor curTelefono = cr.query(
+                    ContactsContract.CommonDataKinds.Phone.CONTENT_URI, null,
+                    ContactsContract.CommonDataKinds.Phone.CONTACT_ID + " = ?", new String[]{identificador}, null);
 
-        while(curTelefono.moveToNext()) {
-            String telefono = curTelefono.getString(curTelefono.getColumnIndex(ContactsContract.CommonDataKinds.Phone.DATA));
 
-            try{
-                System.out.println(telefono +"," +mensaje);
-                smsManager.sendTextMessage(telefono,null,mensaje,null,null);
-                Log.d(tag, "SMS enviado");
-            }catch(Exception e){
-                Log.d(tag, "No se pudo enviar el SMS");
-                //e.printStackTrace();
+            while (curTelefono.moveToNext()) {
+                String telefono = curTelefono.getString(curTelefono.getColumnIndex(ContactsContract.CommonDataKinds.Phone.DATA));
+                try {
+                    System.out.println(telefono + "," + mensaje);
+                    smsManager.sendTextMessage(telefono, null, mensaje, null, null);
+                    Toast.makeText(getApplicationContext(), "Mensaje enviado",
+                            Toast.LENGTH_LONG).show();
+                    Log.d(tag, "SMS enviado");
+                } catch (Exception e) {
+                    Log.d(tag, "No se pudo enviar el SMS");
+                    e.printStackTrace();
+                }
+
             }
-
+            curTelefono.close();
+        } else {
+            Toast.makeText(getApplicationContext(), "El mensaje no puede estar vacio!",
+                    Toast.LENGTH_LONG).show();
+            etMensaje.requestFocus();
         }
-        curTelefono.close();
+
     }
+
+
 }

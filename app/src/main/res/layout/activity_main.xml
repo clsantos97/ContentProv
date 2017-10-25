@@ -49,13 +49,13 @@
     <ListView
         android:id="@+id/lvContactos"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:layout_above="@+id/etMensaje"
         android:layout_alignEnd="@+id/etMensaje"
         android:layout_alignLeft="@+id/etBuscar"
         android:layout_alignRight="@+id/etMensaje"
         android:layout_alignStart="@+id/etBuscar"
         android:layout_below="@+id/etBuscar"
-        android:layout_marginTop="32dp" />
+        android:layout_marginTop="32dp"/>
 
 </RelativeLayout>
